@@ -10,6 +10,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import Form from 'next/form'
 import { Container, Grid, TextField } from '@mui/material';
+import DeleteDialogModal from './deleteDialogModal';
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -24,6 +25,20 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 export default function AddProductModal(props) {
     const { handleClose, openModal = false, productDataById = null } = props;
     console.log("AddProductModal props:", props);
+
+    async function onSubmit(event) {
+        event.preventDefault()
+        console.log("Form submitted with data:", event.target);
+        // const formData = new FormData(event.target)
+        // const response = await fetch('/api/submit', {
+        //     method: 'POST',
+        //     body: formData,
+        // })
+
+        // // Handle response if necessary
+        // const data = await response.json()
+        // // ...
+    }
 
     return (
         <React.Fragment>
@@ -52,16 +67,19 @@ export default function AddProductModal(props) {
                         <Container>
                             <Grid container spacing={2}>
                                 <Grid item>
-                                    <TextField fullWidth id="outlined-basic" label="Title" variant="outlined" value={productDataById?.title ?? ''} />
+                                    <TextField fullWidth id="Title" name="Title" label="Title" variant="outlined" />
                                 </Grid>
                                 <Grid item>
-                                    <TextField fullWidth type='number' id="outlined-basic" label="Price" variant="outlined" value={productDataById?.price ?? ''} />
+                                    <TextField fullWidth type='number' name="Price" id="Price" label="Price" variant="outlined" value={productDataById?.price ?? ''} />
                                 </Grid>
                                 <Grid item>
-                                    <TextField fullWidth id="outlined-basic" label="Category" variant="outlined" value={productDataById?.category ?? ''} />
+                                    <TextField fullWidth id="Category" name="Category" label="Category" variant="outlined" value={productDataById?.category ?? ''} />
                                 </Grid>
                                 <Grid item>
-                                    <TextField fullWidth id="outlined-basic" minRows="2" label="Description" variant="outlined" value={productDataById?.description ?? ''} />
+                                    <TextField fullWidth id="Description" name="Description" minRows="2" label="Description" variant="outlined" value={productDataById?.description ?? ''} />
+                                </Grid>
+                                <Grid item>
+                                    <TextField fullWidth id="Image-URL" name="Image URL" label="Image URL" variant="outlined" value={productDataById?.image ?? ''} />
                                 </Grid>
                             </Grid>
                         </Container>
@@ -69,7 +87,7 @@ export default function AddProductModal(props) {
                     </Form>
                 </DialogContent>
                 <DialogActions>
-                    <Button autoFocus onClick={handleClose}>
+                    <Button autoFocus >
                         Save changes
                     </Button>
                 </DialogActions>

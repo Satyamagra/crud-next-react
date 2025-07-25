@@ -7,12 +7,17 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Box } from "@mui/system";
 import AddProductModal from "./addProductModal";
+import DeleteDialogModal from "./deleteDialogModal";
 
 export default function Product() {
 
     const [productData, setProductData] = useState([])
     const [productDataById, setProductDataById] = useState(null)
     const [open, setOpen] = useState(false);
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [deleteProductId, setDeleteProductId] = useState(0);
+
+
 
     useEffect(() => {
         getAllProducts()
@@ -21,6 +26,8 @@ export default function Product() {
             setProductData([])
             setProductDataById(null);
             setOpen(false);
+            setDeleteModalOpen(false);
+            setDeleteProductId(0);
         }
     }, [])
 
@@ -32,6 +39,10 @@ export default function Product() {
         setOpen(false);
         setProductDataById(null);
 
+    };
+
+    const handleDeleteModalClose = () => {
+        setDeleteModalOpen(false);
     };
 
     const getAllProducts = async () => {
@@ -46,14 +57,21 @@ export default function Product() {
         }
     }
 
-    const handleClickDelete = () => {
+    const handleClickDelete = (id) => {
         console.log("Delete button clicked");
+        setDeleteProductId(id);
+        console.log("Delete Product ID:", id);
+        setDeleteModalOpen(true);
         // Implement delete functionality here
     }
     const handleClickEdit = (productId) => {
         console.log("Edit button clicked");
         getAllProductsById(productId)
         // Implement Edit functionality here
+    }
+
+    const handleDeleteConfirm = (id) => {
+        console.log("Confirm delete for product ID:", deleteProductId);
     }
 
     const getAllProductsById = async (id) => {
@@ -110,7 +128,7 @@ export default function Product() {
                                 <TableCell >{row.category}</TableCell>
                                 <TableCell >
                                     <Box sx={{ display: 'flex', gap: 1 }}>
-                                        <IconButton aria-label="delete" size="small" onClick={handleClickDelete}>
+                                        <IconButton aria-label="delete" size="small" onClick={() => handleClickDelete(row.id)}>
                                             <DeleteIcon fontSize="inherit" />
                                         </IconButton>
                                         <IconButton aria-label="edit" size="small" onClick={() => handleClickEdit(row.id)}>
@@ -124,6 +142,7 @@ export default function Product() {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <DeleteDialogModal openModal={deleteModalOpen} handleClose={handleDeleteModalClose} handleConfirm={handleDeleteConfirm}></DeleteDialogModal>
 
         </Box >
     );
